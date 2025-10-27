@@ -21,8 +21,8 @@ public class OrganizationController {
     public ResponseEntity<OrganizationDto> createOrganization(@RequestBody OrganizationDto organization) {
         // Implementation for creating an organization
 
-        organizationService.createOrganization(organization);
-        return ResponseEntity.ok(organization);
+        OrganizationDto organizationDto=organizationService.createOrganization(organization);
+        return ResponseEntity.ok(organizationDto);
 
 
     }

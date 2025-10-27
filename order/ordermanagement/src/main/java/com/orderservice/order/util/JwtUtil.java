@@ -1,4 +1,4 @@
-package com.microservice.gateway.util;
+package com.orderservice.order.util;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

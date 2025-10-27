@@ -1,6 +1,7 @@
 package com.booking.usermanagement.service.ServiceImpl;
 
 import com.booking.usermanagement.dtos.UserDto;
+import com.booking.usermanagement.dtos.ValidationUserDto;
 import com.booking.usermanagement.entities.Role;
 import com.booking.usermanagement.entities.User;
 import com.booking.usermanagement.exception.ResourceAlreadyExists;
@@ -15,9 +16,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.logging.Logger;
 
 @Service
 @Slf4j
@@ -64,8 +65,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto getUserById(UUID id) {
-       User user = userRepo.findById(id).orElseThrow(()->new ResourceNotFoundException("User", "id", id));
+    public UserDto getUserById(String id) {
+       User user = userRepo.findById(UUID.fromString(id)).orElseThrow(()->new ResourceNotFoundException("User", "id", id));
        return dtoMapper.entityToDto(user);
 
     }
@@ -74,12 +75,17 @@ public class UserServiceImpl implements UserService {
     public UserDto updateUser(UserDto userDto) {
         UUID userId = userDto.getId();
         User existingUser = userRepo.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
-        existingUser.setName(userDto.getName());
-        existingUser.setEmail(userDto.getEmail());
-        existingUser.setPassword(passwordEncoder.encode(userDto.getPassword()));
-        long roleId = userDto.getRoleId();
-        Role role= roleRepo.findById(roleId).orElseThrow(() -> new ResourceNotFoundException("Role", "id", roleId));
-        existingUser.setRole(role);
+        if(userDto.getName()!=null)  existingUser.setName(userDto.getName());
+        if(userDto.getEmail()!=null)  throw new IllegalArgumentException("Cannot change email");
+        if(userDto.getPassword()!=null)existingUser.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        if(userDto.getRoleId()!=null) {
+            long roleId = userDto.getRoleId();
+            if(roleId!=1L){
+                throw new IllegalArgumentException("Cannot change to admin role");
+            }
+            Role role= roleRepo.findById(roleId).orElseThrow(() -> new ResourceNotFoundException("Role", "id", roleId));
+            existingUser.setRole(role);
+        }
         User updatedUser = userRepo.save(existingUser);
         return dtoMapper.entityToDto(updatedUser);
     }
@@ -99,5 +105,20 @@ public class UserServiceImpl implements UserService {
         } else {
             throw new ResourceNotFoundException("User", "email", email);
         }
+    }
+
+    @Override
+    public List<UserDto> getAllUsers() {
+        return userRepo.findAll().stream().map(dtoMapper::entityToDto).toList();
+    }
+
+    @Override
+    public ValidationUserDto validateUser(String username) {
+        User user=userRepo.findByEmail(username).orElseThrow(() -> new ResourceNotFoundException("User", "email", username));
+
+        ValidationUserDto responseDto=new ValidationUserDto();
+        responseDto.setUsername(user.getEmail());
+        responseDto.setRoleName(user.getRole().getName());
+        return responseDto;
     }
 }

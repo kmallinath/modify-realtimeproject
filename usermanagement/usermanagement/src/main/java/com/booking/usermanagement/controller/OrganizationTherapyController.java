@@ -1,5 +1,7 @@
 package com.booking.usermanagement.controller;
 
+import com.booking.usermanagement.config.CustomerUserDetails;
+import com.booking.usermanagement.config.CustomerUserDetailsService;
 import com.booking.usermanagement.dtos.QualifyTherapiesRequest;
 import com.booking.usermanagement.entities.OrganizationTherapy;
 import com.booking.usermanagement.entities.Therapy;
@@ -8,6 +10,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,15 +27,17 @@ public class OrganizationTherapyController {
      * Add new therapies to an organization (does NOT replace existing)
      * POST /api/organizations/{orgId}/therapies/qualify
      */
-    @PostMapping("qualify")
+    @PostMapping("/add")
+    @PreAuthorize("hasRole('SPONSORADMIN')")
     public ResponseEntity<List<OrganizationTherapy>> qualifyTherapies(
             @PathVariable UUID orgId,
-            @Valid @RequestBody QualifyTherapiesRequest request
+            @Valid @RequestBody QualifyTherapiesRequest request,
+            @AuthenticationPrincipal CustomerUserDetails userDetails
     ) {
         List<OrganizationTherapy> result = service.qualifyTherapies(
                 orgId,
                 request.getTherapyIds(),
-                request.getQualifiedBy()
+                userDetails.getUsername()
         );
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
@@ -52,12 +58,14 @@ public class OrganizationTherapyController {
     @PutMapping("/qualify")
     public ResponseEntity<List<OrganizationTherapy>> replaceQualifiedTherapies(
             @PathVariable UUID orgId,
-            @Valid @RequestBody QualifyTherapiesRequest request
+            @Valid @RequestBody QualifyTherapiesRequest request,
+            @AuthenticationPrincipal CustomerUserDetails userDetails
     ) {
         List<OrganizationTherapy> result = service.replaceQualifiedTherapies(
                 orgId,
                 request.getTherapyIds(),
-                request.getQualifiedBy()
+                userDetails.getUsername()
+
         );
         return ResponseEntity.ok(result);
     }
@@ -66,7 +74,7 @@ public class OrganizationTherapyController {
      * Disqualify (remove) specific therapies
      * DELETE /api/organizations/{orgId}/therapies/qualify
      */
-    @DeleteMapping("/qualify")
+    @DeleteMapping("/disqualify")
     public ResponseEntity<Void> disqualifyTherapies(
             @PathVariable UUID orgId,
             @RequestBody List<UUID> therapyIds

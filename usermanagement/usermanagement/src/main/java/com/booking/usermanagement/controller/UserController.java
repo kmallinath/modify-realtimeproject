@@ -2,12 +2,14 @@ package com.booking.usermanagement.controller;
 
 
 import com.booking.usermanagement.dtos.UserDto;
+import com.booking.usermanagement.dtos.ValidationUserDto;
 import com.booking.usermanagement.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -30,7 +32,7 @@ public class UserController {
 
     @GetMapping("/getbyid/{id}")
     public ResponseEntity<UserDto> getUserById(@PathVariable("id") UUID id) {
-        UserDto userDto = userService.getUserById(id);
+        UserDto userDto = userService.getUserById(String.valueOf(id));
         return ResponseEntity.ok(userDto);
     }
 
@@ -54,5 +56,17 @@ public class UserController {
     public ResponseEntity<UserDto> getUserByEmail(@PathVariable("email") String email) {
         UserDto userDto = userService.getUserByEmail(email);
         return ResponseEntity.ok(userDto);
+    }
+
+    @GetMapping("/getall")
+    public ResponseEntity<List<UserDto>> getAllUsers() {
+        List<UserDto> users = userService.getAllUsers();
+        return ResponseEntity.ok(users);
+    }
+
+    @GetMapping("/validate")
+    public ResponseEntity<ValidationUserDto> validateUser(@RequestParam String userName) {
+        ValidationUserDto validatedUser = userService.validateUser(userName);
+        return ResponseEntity.ok(validatedUser);
     }
 }

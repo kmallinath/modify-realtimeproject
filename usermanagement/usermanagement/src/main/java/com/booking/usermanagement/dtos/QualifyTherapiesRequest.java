@@ -12,6 +12,4 @@ public class QualifyTherapiesRequest {
     @NotEmpty(message = "At least one therapy ID is required")
     private List<UUID> therapyIds;
 
-    @NotBlank(message = "Qualifier is required")
-    private String qualifiedBy;
 }

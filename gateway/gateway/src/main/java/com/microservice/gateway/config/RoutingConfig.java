@@ -14,8 +14,11 @@ public class RoutingConfig {
                 // ORDER SERVICE - More specific route MUST come first
                 .route("order-service", r -> r
                         .path("/api/orders/**")
+                        .filters(f -> f.filter((exchange, chain) -> {
+                            System.out.println(">>> Gateway routing to Order Service: " + exchange.getRequest().getURI());
+                            return chain.filter(exchange);
+                        }))
                         .uri("http://localhost:8081"))
-
                 // USER MANAGEMENT - Less specific route comes second
                 .route("user-management", r -> r
                         .path("/api/user/**")

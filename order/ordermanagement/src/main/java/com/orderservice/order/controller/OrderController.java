@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -23,6 +24,7 @@ public class OrderController {
     @PostMapping("/create")
     public ResponseEntity<OrderDto> createOrder(@RequestParam UUID nurseId) {
 
+        System.out.println("Creating order for nurseId: " + nurseId);
         return ResponseEntity.ok(orderService.createOrder(nurseId));
     }
 
@@ -62,5 +64,13 @@ public class OrderController {
         ProductReceiptDto saved = orderService.saveProductReceipt(orderId, dto);
         return ResponseEntity.ok(saved);
     }
+
+
+    @GetMapping("/debug-headers")
+    public Map<String, String> debugHeaders(@RequestHeader Map<String, String> headers) {
+        System.out.println(">>> All headers received by Order Service: " + headers);
+        return headers;
+    }
+
 }
 

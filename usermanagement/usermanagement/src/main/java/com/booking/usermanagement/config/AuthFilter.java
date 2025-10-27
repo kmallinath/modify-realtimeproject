@@ -25,17 +25,14 @@ public class AuthFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
 
-    private final CustomerUserDetailsService customerUserDetails;
+    private final CustomerUserDetailsService customerUserDetailsService;
 
-    public AuthFilter(JwtUtil jwtUtil, CustomerUserDetailsService customerUserDetails) {
+    public AuthFilter(JwtUtil jwtUtil, CustomerUserDetailsService customerUserDetailsService) {
         this.jwtUtil = jwtUtil;
-        this.customerUserDetails = customerUserDetails;
+        this.customerUserDetailsService = customerUserDetailsService;
     }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(12);
-    }
+
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -56,18 +53,17 @@ public class AuthFilter extends OncePerRequestFilter {
             String token = authHeader.substring(7);
             try {
                 Claims claims = jwtUtil.validateToken(token);
-                String username = claims.getSubject();
+                String email = claims.get("email", String.class);
+                System.out.println("Token valid for user: " + email);
 
-                System.out.println("Token valid for user: " + username);
-
-                CustomerUserDetails userDetails = (CustomerUserDetails) customerUserDetails.loadUserByUsername(username);
+                CustomerUserDetails userDetails = (CustomerUserDetails) customerUserDetailsService.loadUserByUsername(email);
                 UsernamePasswordAuthenticationToken authentication =
                         new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
 
             } catch (Exception e) {
-                System.out.println("Error om Token validation: " + e.getMessage());
+                System.out.println("Error of Token validation: " + e.getMessage());
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 response.getWriter().write("Invalid or expired token");
                 return;
@@ -75,7 +71,7 @@ public class AuthFilter extends OncePerRequestFilter {
         } else {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.getWriter().write("Invalid or expired token");
-            System.out.println("No Authorization header or invalid format");
+            System.out.println("No Authorization header or invalid format" +authHeader);
             return;
         }
 

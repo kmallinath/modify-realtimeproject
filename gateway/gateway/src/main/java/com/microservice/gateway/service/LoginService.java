@@ -34,7 +34,7 @@ public class LoginService {
         UserDto savedUser = restTemplate.getForObject(userServiceUrl, UserDto.class);
         if (savedUser != null) {
             passwordEncoder.matches(enteredPassword, savedUser.getPassword());
-            return jwtUtil.generateToken(savedUser.getId(), savedUser.getEmail(), savedUser.getRoleName());
+            return jwtUtil.generateToken(savedUser.getId(), savedUser.getRoleName(), savedUser.getEmail());
         } else {
             return "User not found";
         }
