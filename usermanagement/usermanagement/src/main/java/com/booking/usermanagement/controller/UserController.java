@@ -1,12 +1,14 @@
 package com.booking.usermanagement.controller;
 
 
+import com.booking.usermanagement.dtos.LoginDto;
 import com.booking.usermanagement.dtos.UserDto;
 import com.booking.usermanagement.dtos.ValidationUserDto;
 import com.booking.usermanagement.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,6 +26,7 @@ public class UserController {
 
     // register user
     @PostMapping("/register")
+    @PreAuthorize("hasRole('SPONSORADMIN')")
     public ResponseEntity<UserDto> registerUser(@RequestBody UserDto userDto) {
         log.info("Controller: Received registration request for email: {}", userDto.getEmail());
         UserDto savedUserDto=userService.registerUser(userDto);
@@ -43,6 +46,7 @@ public class UserController {
         return ResponseEntity.ok(updatedUserDto);
     }
     @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasRole('SPONSORADMIN')")
     public ResponseEntity<String> deleteUserById(@PathVariable("id") UUID id) {
         boolean isDeleted = userService.deleteUserById(id);
         if (isDeleted) {
@@ -68,5 +72,11 @@ public class UserController {
     public ResponseEntity<ValidationUserDto> validateUser(@RequestParam String userName) {
         ValidationUserDto validatedUser = userService.validateUser(userName);
         return ResponseEntity.ok(validatedUser);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<String> loginUser(@RequestBody LoginDto userDto) {
+        String token = userService.loginUser(userDto.getEmail(), userDto.getPassword());
+        return ResponseEntity.ok(token);
     }
 }

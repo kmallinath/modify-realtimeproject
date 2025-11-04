@@ -5,6 +5,7 @@ import com.booking.usermanagement.entities.Therapy;
 import com.booking.usermanagement.service.ServiceImpl.TherapyService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,7 +17,8 @@ import java.util.UUID;
 public class TherapyController {
     private final TherapyService therapyService;
 
-    @PostMapping
+    @PostMapping("/create")
+    @PreAuthorize("hasRole('SPONSORADMIN')")
     public Therapy create(@Valid  @RequestBody TherapyDto therapy) {
         return therapyService.createTherapy(therapy);
     }
@@ -27,6 +29,7 @@ public class TherapyController {
     }
 
     @PutMapping("/update/{id}")
+    @PreAuthorize("hasRole('SPONSORADMIN')")
     public Therapy update(@PathVariable("id") UUID id, @Valid @RequestBody TherapyDto therapy) {
         return therapyService.updateTherapy(id, therapy);
     }

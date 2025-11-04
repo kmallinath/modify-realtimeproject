@@ -5,6 +5,7 @@ import com.booking.usermanagement.entities.Role;
 import com.booking.usermanagement.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -15,6 +16,7 @@ public class RoleController {
     private RoleService roleService;
 
     @PostMapping("/add")
+    @PreAuthorize("hasRole('SPONSORADMIN')")
     public ResponseEntity<RoleDto> addRole(@RequestBody RoleDto role) {
         RoleDto savedRole = roleService.addNewRole(role);
         return ResponseEntity.ok(savedRole);

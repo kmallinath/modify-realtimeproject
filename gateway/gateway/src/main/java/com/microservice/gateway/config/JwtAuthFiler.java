@@ -25,7 +25,7 @@ public class JwtAuthFiler implements GlobalFilter, Ordered {
 //        System.out.println(">>> Gateway incoming request path: " + path); // LOG 1: Incoming path
 
         // Skip auth for public endpoints
-        if (path.contains("/api/auth/") || path.contains("/api/user/getbyemail")) {
+        if (path.contains("/api/auth/") || path.contains("/api/user/")) {
 //            System.out.println(">>> Gateway skipping JWT validation for path: " + path); // LOG 2
             return chain.filter(exchange);
         }

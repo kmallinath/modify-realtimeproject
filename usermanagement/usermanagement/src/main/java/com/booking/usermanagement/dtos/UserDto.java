@@ -9,10 +9,11 @@ import java.util.Date;
 import java.util.UUID;
 
 @Data
-public class UserDto   {
+public class UserDto  implements Serializable {
 
-//    @Serial
-//    private static final long serialVersionUID = 1L;
+    public long SerialVersionUID = 1L;
+
+
 
     private UUID id;
     private String name;

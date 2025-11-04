@@ -18,4 +18,6 @@ public interface UserService {
     List<UserDto> getAllUsers();
 
     ValidationUserDto validateUser(String validationUserDto);
+
+    String loginUser(String email, String password);
 }

@@ -14,6 +14,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 @Component
@@ -42,6 +43,7 @@ public class AuthFilter extends OncePerRequestFilter {
             String token = authHeader.substring(7);
 
             Claims claims = jwtUtil.validateToken(token);
+            UUID userId= UUID.fromString(claims.getSubject());
             String username = claims.get("email", String.class);
             System.out.println("Authenticated user: " + username);
             Date issuedTime = claims.getIssuedAt();
@@ -51,7 +53,7 @@ public class AuthFilter extends OncePerRequestFilter {
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, " Token has expired");
                 return;
             };
-            CustomUserDetails userDetails = new CustomUserDetails(username,role);
+            CustomUserDetails userDetails = new CustomUserDetails(username,role,userId);
             UsernamePasswordAuthenticationToken authentication =
                     new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 

@@ -22,13 +22,17 @@ public class Order {
     @Column(name = "order_number", nullable = true, unique = true)
     private String orderNumber;
 
+    @Column(nullable = true)
+    private String organization;
+
     @Column(nullable = false)
     private String status; // ELIGIBILITY, PRODUCT_SUBMITTED, APPROVED, RECEIPT_SUBMITTED
 
     @Column(nullable = false)
-    private UUID createdBy; // nurseId (from User Service)
+    private String createdBy; // nurse email (from User Service)
 
-    private UUID approvedBy; // sponsorId
+    @Column(nullable = true)
+    private String approvedBy; // sponsorId
 
     @OneToOne(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private Eligibility eligibility;
@@ -40,9 +44,11 @@ public class Order {
     private ProductReceipt receipt;
 
     @CreatedDate
+    @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
 
     @LastModifiedDate
+    @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
 
     public Order() {

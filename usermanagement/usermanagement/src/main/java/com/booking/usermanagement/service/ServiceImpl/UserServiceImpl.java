@@ -10,6 +10,7 @@ import com.booking.usermanagement.repository.RoleRepo;
 import com.booking.usermanagement.repository.UserRepo;
 import com.booking.usermanagement.service.UserService;
 import com.booking.usermanagement.util.DtoMapper;
+import com.booking.usermanagement.util.JwtUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -39,12 +40,18 @@ public class UserServiceImpl implements UserService {
     private DtoMapper dtoMapper;
 
 
+    @Autowired
+    private JwtUtil jwtUtil;
+
+
 
 
 
     @Override
     @Transactional
     public UserDto registerUser(UserDto userDto) {
+
+
 
         log.info("Registering user with email: {}", userDto.getEmail());
         String email = userDto.getEmail();
@@ -120,5 +127,16 @@ public class UserServiceImpl implements UserService {
         responseDto.setUsername(user.getEmail());
         responseDto.setRoleName(user.getRole().getName());
         return responseDto;
+    }
+
+    @Override
+    public String loginUser(String username, String password) {
+
+        Optional<User> savedUser=userRepo.findByEmail(username);
+
+        if(!passwordEncoder.matches(password, savedUser.get().getPassword())){
+            return  "INVLAID_CREDENTIALS";
+        }
+        return jwtUtil.generateToken(savedUser.get().getId(),savedUser.get().getRole().getName(),username);
     }
 }

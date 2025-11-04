@@ -1,15 +1,20 @@
 package com.orderservice.order.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.orderservice.order.config.CustomUserDetails;
 import com.orderservice.order.dto.EligibilityDto;
 import com.orderservice.order.dto.OrderDto;
 import com.orderservice.order.dto.OrderProductDto;
 import com.orderservice.order.dto.ProductReceiptDto;
 import com.orderservice.order.service.OrderService;
 import lombok.RequiredArgsConstructor;
+import org.apache.tomcat.util.http.parser.Authorization;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.nio.file.AccessDeniedException;
 import java.util.Map;
 import java.util.UUID;
 
@@ -22,10 +27,14 @@ public class OrderController {
 
 
     @PostMapping("/create")
-    public ResponseEntity<OrderDto> createOrder(@RequestParam UUID nurseId) {
+    public ResponseEntity<OrderDto> createOrder(@AuthenticationPrincipal CustomUserDetails user, @RequestHeader("Authorization")String authorization) throws AccessDeniedException {
 
-        System.out.println("Creating order for nurseId: " + nurseId);
-        return ResponseEntity.ok(orderService.createOrder(nurseId));
+
+
+
+        System.out.println("Creating order for nurseId: " + user.getUsername());
+        OrderDto orderDto=orderService.createOrder(user,authorization);
+        return ResponseEntity.ok(orderDto);
     }
 
 
