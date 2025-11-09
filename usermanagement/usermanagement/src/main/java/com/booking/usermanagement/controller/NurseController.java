@@ -20,7 +20,7 @@ public class NurseController {
 
     @PostMapping("/onboard")
     @PreAuthorize("hasRole('SPONSORADMIN')")
-    public Nurse onboard(@RequestBody NurseOnboardRequest req) {
+    public NurseDto onboard(@RequestBody NurseOnboardRequest req) {
         return nurseService.onboardNurse(req.getName(), req.getEmail(), req.getPhone(),
                 req.getOrganizationId(), req.getTherapyIds());
     }

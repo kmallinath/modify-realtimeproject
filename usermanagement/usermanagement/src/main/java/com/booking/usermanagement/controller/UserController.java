@@ -4,11 +4,13 @@ package com.booking.usermanagement.controller;
 import com.booking.usermanagement.dtos.LoginDto;
 import com.booking.usermanagement.dtos.UserDto;
 import com.booking.usermanagement.dtos.ValidationUserDto;
+import com.booking.usermanagement.entities.User;
 import com.booking.usermanagement.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -79,4 +81,30 @@ public class UserController {
         String token = userService.loginUser(userDto.getEmail(), userDto.getPassword());
         return ResponseEntity.ok(token);
     }
+
+    @PostMapping("/password/forgot")
+    public ResponseEntity<String> forgotPassword(@RequestParam String email) {
+        userService.forgotPassword(email);
+        return ResponseEntity.ok("Password reset code sent to email");
+    }
+
+    @PostMapping("/password/reset")
+    public ResponseEntity<String> resetPassword(@RequestParam String email, @RequestParam String code, @RequestParam String newPassword) {
+        String result = userService.resetPassword(email, code, newPassword);
+        return ResponseEntity.ok(result);
+    }
+
+    @PostMapping("/activate")
+    public  ResponseEntity<String> activateAccount(@RequestParam String email, @RequestParam String password, @RequestParam String code) {
+        String result = userService.activateAccount(email, password,code);
+        return ResponseEntity.ok(result);
+    }
+
+    @PostMapping("/send-activation-code")
+    public  ResponseEntity<Void> sendActivationCode(@RequestParam String email) {
+        //yet to implement a method to get user by email
+        return ResponseEntity.ok().build();
+    }
+
+
 }

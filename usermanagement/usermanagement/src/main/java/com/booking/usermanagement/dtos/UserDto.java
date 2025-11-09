@@ -20,11 +20,13 @@ public class UserDto  implements Serializable {
     private String email;
     private String password;
     private Long roleId;
+    private  String status;
     private String roleName;
     private Date createdAt;
     private Date updatedAt;
     private String createdBy;
     private String updatedBy;
+
 
 
 }

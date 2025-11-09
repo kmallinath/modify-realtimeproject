@@ -26,6 +26,8 @@ public class User {
     private String email;
     @Column(nullable = false)
     private String password;
+    @Column(nullable = true)
+    private String status="PENDING EMAIL CONFIRMATION";
     @ManyToOne
     @JoinColumn(name = "role_id",nullable = false)
     private Role role;
@@ -36,6 +38,8 @@ public class User {
     private Date updatedAt;
     private String createdBy="system";
     private String updatedBy="system";
+    private  String verificationCode;
+    private  Date codeExpiresAt;
 
 
 

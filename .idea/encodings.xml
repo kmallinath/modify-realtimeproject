@@ -2,7 +2,7 @@
 <project version="4">
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/gateway/gateway/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/notificationService/notificationService/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/notificationservice/notificationservice/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/order/ordermanagement/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/usermanagement/usermanagement/src/main/java" charset="UTF-8" />
   </component>
