@@ -5,18 +5,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.orderservice.order.config.CustomUserDetails;
 import com.orderservice.order.dto.*;
-import com.orderservice.order.entity.Eligibility;
-import com.orderservice.order.entity.Order;
-import com.orderservice.order.entity.OrderProduct;
-import com.orderservice.order.entity.ProductReceipt;
+import com.orderservice.order.entity.*;
 import com.orderservice.order.exception.ResourceAlreadyExists;
 import com.orderservice.order.exception.ResourceNotFoundException;
-import com.orderservice.order.repository.EligibilityRepository;
-import com.orderservice.order.repository.OrderProductRepository;
-import com.orderservice.order.repository.OrderRepository;
-import com.orderservice.order.repository.ProductReceiptRepository;
+import com.orderservice.order.repository.*;
 import com.orderservice.order.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.core.Authentication;
@@ -26,6 +21,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.nio.file.AccessDeniedException;
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.random.RandomGenerator;
 
@@ -34,23 +31,24 @@ public class OrderWorkflowService implements OrderService {
 
 
 
+
     @Autowired
     private RestTemplate restTemplate;
-
-
     private final ObjectMapper objectMapper;
     private final EligibilityRepository eligibilityRepository;
     private final OrderProductRepository orderProductRepository;
     private final ProductReceiptRepository receiptRepository;
     private final OrderRepository orderRepository;
+    private final WorkflowCountryRepository workflowCountryRepository;
 
     @Autowired
-    public OrderWorkflowService(ObjectMapper objectMapper, EligibilityRepository eligibilityRepository, OrderProductRepository orderProductRepository, ProductReceiptRepository receiptRepository, OrderRepository orderRepository) {
+    public OrderWorkflowService(ObjectMapper objectMapper, EligibilityRepository eligibilityRepository, OrderProductRepository orderProductRepository, ProductReceiptRepository receiptRepository, OrderRepository orderRepository, WorkflowCountryRepository workflowCountryRepository) {
         this.objectMapper = objectMapper;
         this.eligibilityRepository = eligibilityRepository;
         this.orderProductRepository = orderProductRepository;
         this.receiptRepository = receiptRepository;
         this.orderRepository = orderRepository;
+        this.workflowCountryRepository = workflowCountryRepository;
     }
 
     @Override
@@ -66,7 +64,7 @@ public class OrderWorkflowService implements OrderService {
             userDto = restTemplate.exchange(
                     "http://localhost:8080/api/user/nurses/get/id/" + userId,
                     HttpMethod.GET,
-                    new org.springframework.http.HttpEntity<>(headers),
+                    new HttpEntity<>(headers),
                     NurseDto.class
             ).getBody();
 
@@ -78,10 +76,14 @@ public class OrderWorkflowService implements OrderService {
             // Log and rethrow as AccessDenied if it’s a 403/401
             throw new AccessDeniedException("Failed to fetch nurse details: " + e.getMessage());
         }
-
+        String country=userDto.getOrganizationDto().getCountry();
+        String workflow=workflowCountryRepository.findByCountryCode(country)
+                .orElseThrow(() -> new ResourceNotFoundException("Workflow for country"+country))
+                .getWorkflowName();
         Order order = new Order();
         order.setCreatedBy(userDto.getEmail());
         order.setStatus("ELIGIBILITY");
+        order.setWorkflow(workflow);
 
         // First save to get the UUID
         order = orderRepository.save(order);
@@ -100,6 +102,7 @@ public class OrderWorkflowService implements OrderService {
         dto.setId(order.getId());
         dto.setStatus(order.getStatus());
         dto.setCreatedBy(order.getCreatedBy());
+        dto.setWorkflow(order.getWorkflow());
         dto.setOrderNumber(order.getOrderNumber());  // Don't forget this!
         return dto;
     }
@@ -113,12 +116,18 @@ public class OrderWorkflowService implements OrderService {
     public EligibilityDto saveEligibility(UUID orderId, EligibilityDto dto) throws JsonProcessingException {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new ResourceNotFoundException("Order", orderId));
+        if (!"ELIGIBILITY".equals(order.getStatus())) {
+            throw new IllegalStateException("Invalid workflow state. Expected ELIGIBILITY but found: " + order.getStatus());
+        }
 
         Eligibility eligibility = new Eligibility();
         eligibility.setOrder(order);
+        eligibility.setWorkflow(order.getWorkflow());
         eligibility.setResponses(objectMapper.writeValueAsString(dto.getResponses()));
         order.setEligibility(eligibility);
+        order.setStatus("ORDER_PRODUCT");
         orderRepository.save(order);
+        dto.setWorkflow(order.getWorkflow());
         return dto;
 
     }
@@ -127,11 +136,18 @@ public class OrderWorkflowService implements OrderService {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new ResourceNotFoundException("Order",orderId));
 
+        if (!"ORDER_PRODUCT".equals(order.getStatus())) {
+            throw new IllegalStateException("Invalid workflow state. Expected ORDER_PRODUCT but found: " + order.getStatus());
+        }
+
         OrderProduct product = new OrderProduct();
         product.setOrder(order);
+        product.setWorkflow(order.getWorkflow());
         product.setProductDetails(objectMapper.writeValueAsString(dto.getProductDetails()));
         order.setOrderProduct(product);
-        orderRepository.save(order); // save the order to persist product
+        order.setStatus("PRODUCT_RECEIPT");
+        orderRepository.save(order);
+        dto.setWorkflow(order.getWorkflow());// save the order to persist product
         return dto;
 
 
@@ -142,13 +158,37 @@ public class OrderWorkflowService implements OrderService {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new ResourceNotFoundException("Order",orderId));
 
+        if(!"PRODUCT_RECEIPT".equals(order.getStatus())) {
+            throw new IllegalStateException("Invalid workflow state. Expected PRODUCT_RECEIPT but found: " + order.getStatus());
+        }
+
         ProductReceipt receipt = new ProductReceipt();
         receipt.setOrder(order);
+        receipt.setWorkflow(order.getWorkflow());
         receipt.setReceiptData(objectMapper.writeValueAsString(dto.getReceiptData()));
         order.setReceipt(receipt);
+        order.setStatus("COMPLETED");
         orderRepository.save(order);
+        dto.setWorkflow(order.getWorkflow());// save the order to persist receipt
         return dto;
 
 
     }
+
+    @Override
+    public List<OrderDto> getOrdersByNurseId(String username) {
+        // Implementation for fetching orders by nurse ID
+        List<Order> savedOrders=orderRepository.findByCreatedBy(username);
+        return savedOrders.stream().map(order -> {
+            OrderDto dto = new OrderDto();
+            dto.setId(order.getId());
+            dto.setStatus(order.getStatus());
+            dto.setCreatedBy(order.getCreatedBy());
+            dto.setWorkflow(order.getWorkflow());
+            dto.setOrderNumber(order.getOrderNumber());
+            return dto;
+        }).toList();
+    }
+
+
 }

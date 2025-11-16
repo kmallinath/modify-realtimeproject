@@ -10,6 +10,12 @@ public class ResourceNotFoundException extends RuntimeException {
        super(String.format("%s not found with id  %s", resource, id));
     }
 
+    public ResourceNotFoundException(String resource) {
+    }
+
+    public ResourceNotFoundException(String workflowSchema, String workflow) {
+    }
+
 
     public static class ExceptionHandler {
     }

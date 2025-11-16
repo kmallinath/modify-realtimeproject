@@ -45,7 +45,8 @@ public class SecurityConfig {
 
                             .requestMatchers("/api/user/login").permitAll()
                             .requestMatchers("/api/auth/**").permitAll()
-                            // All other endpoints require authentication
+                            .requestMatchers("/api/user/register").permitAll()
+                            .requestMatchers("/api/user/password/**").permitAll()
                             .anyRequest().authenticated()
                     )
                     .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class);

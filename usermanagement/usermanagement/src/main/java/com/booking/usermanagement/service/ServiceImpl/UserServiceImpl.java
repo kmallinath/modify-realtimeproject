@@ -164,6 +164,11 @@ public class UserServiceImpl implements UserService {
             return "ACCOUNT_NOT_ACTIVATED";
         }
 
+        // Check if password is set (should not be null for active accounts)
+        if (user.getPassword() == null || user.getPassword().isEmpty()) {
+            return "INVALID_CREDENTIALS";
+        }
+
         // Validate password
         if (!passwordEncoder.matches(password, user.getPassword())) {
             return "INVALID_CREDENTIALS";
@@ -174,7 +179,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String activateAccount(String email, String password,String code) {
+    public String activateAccount(String email, String password, String code) {
         User savedUser = userRepo.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "email", email));
 
@@ -193,11 +198,19 @@ public class UserServiceImpl implements UserService {
             return "VERIFICATION_CODE_EXPIRED";
         }
 
+        // Validate password requirements (add basic validation)
+        if (password == null || password.trim().isEmpty()) {
+            return "INVALID_PASSWORD";
+        }
+
+        // Encode password BEFORE saving
+        String encodedPassword = passwordEncoder.encode(password);
+
         // Activate account
         savedUser.setStatus("ACTIVE");
         savedUser.setVerificationCode(null);
         savedUser.setCodeExpiresAt(null);
-        savedUser.setPassword(passwordEncoder.encode(password));
+        savedUser.setPassword(encodedPassword);
         userRepo.save(savedUser);
 
         log.info("Account activated successfully: {}", email);
@@ -257,8 +270,16 @@ public class UserServiceImpl implements UserService {
             return "VERIFICATION_CODE_EXPIRED";
         }
 
+        // Validate password requirements
+        if (newPassword == null || newPassword.trim().isEmpty()) {
+            return "INVALID_PASSWORD";
+        }
+
+        // Encode password BEFORE saving
+        String encodedPassword = passwordEncoder.encode(newPassword);
+
         // Reset password
-        user.setPassword(passwordEncoder.encode(newPassword));
+        user.setPassword(encodedPassword);
         user.setVerificationCode(null);
         user.setCodeExpiresAt(null);
         userRepo.save(user);
@@ -294,6 +315,7 @@ public class UserServiceImpl implements UserService {
      * Validate verification code
      */
     private boolean isValidCode(User user, String code) {
+        System.out.println("USER CODE IS"+ code);
         return user.getVerificationCode() != null &&
                 user.getVerificationCode().equals(code);
     }

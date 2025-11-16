@@ -51,6 +51,10 @@ public class Order {
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
 
+    private String workflow;
+
+    private String country;
+
     public Order() {
 
     }

@@ -28,7 +28,7 @@ public class UserController {
 
     // register user
     @PostMapping("/register")
-    @PreAuthorize("hasRole('SPONSORADMIN')")
+//    @PreAuthorize("hasRole('SPONSORADMIN')")
     public ResponseEntity<UserDto> registerUser(@RequestBody UserDto userDto) {
         log.info("Controller: Received registration request for email: {}", userDto.getEmail());
         UserDto savedUserDto=userService.registerUser(userDto);
@@ -84,7 +84,11 @@ public class UserController {
 
     @PostMapping("/password/forgot")
     public ResponseEntity<String> forgotPassword(@RequestParam String email) {
-        userService.forgotPassword(email);
+        System.out.println("Password reset requested for email: " + email);
+        String status=userService.forgotPassword(email);
+        if(status.equals("USER_ACCOUNT_NOT_ACTIVE")){
+            return ResponseEntity.status(404).body("User account is not active");
+        }
         return ResponseEntity.ok("Password reset code sent to email");
     }
 
@@ -94,13 +98,13 @@ public class UserController {
         return ResponseEntity.ok(result);
     }
 
-    @PostMapping("/activate")
+    @PostMapping("/password/activate")
     public  ResponseEntity<String> activateAccount(@RequestParam String email, @RequestParam String password, @RequestParam String code) {
         String result = userService.activateAccount(email, password,code);
         return ResponseEntity.ok(result);
     }
 
-    @PostMapping("/send-activation-code")
+    @PostMapping("/password/send-activation-code")
     public  ResponseEntity<Void> sendActivationCode(@RequestParam String email) {
         //yet to implement a method to get user by email
         return ResponseEntity.ok().build();

@@ -15,6 +15,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.nio.file.AccessDeniedException;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -80,6 +81,14 @@ public class OrderController {
         System.out.println(">>> All headers received by Order Service: " + headers);
         return headers;
     }
+
+    @GetMapping("/getbynurse")
+    public List<OrderDto> getOrdersByNurseId(@AuthenticationPrincipal CustomUserDetails user) {
+        // Implementation to retrieve orders by nurseId
+        return orderService.getOrdersByNurseId(user.getUsername());
+    }
+
+
 
 }
 
