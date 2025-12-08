@@ -22,4 +22,6 @@ public interface OrderService {
     public ProductReceiptDto saveProductReceipt(UUID orderId,ProductReceiptDto productReceipt) throws JsonProcessingException;
 
     List<OrderDto> getOrdersByNurseId(String username);
+
+    OrderDto getOrderById(UUID orderId);
 }

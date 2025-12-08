@@ -1,4 +1,4 @@
-package com.modify.notificationService.dtos;
+package com.modify.notificationService.events;
 
 
 import lombok.Data;

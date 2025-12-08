@@ -3,6 +3,9 @@ package com.modify.notificationService.config;
 import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
+import org.apache.kafka.common.serialization.StringDeserializer;
+import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
+import org.springframework.kafka.support.serializer.ErrorHandlingDeserializer;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.KafkaProducer;
@@ -28,14 +31,21 @@ public class KafkaConfig {
     public ConsumerFactory<String, Object> consumerFactory() {
         Map<String, Object> configProps = new HashMap<>();
         configProps.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
-        configProps.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, org.apache.kafka.common.serialization.StringDeserializer.class);
-        configProps.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, org.springframework.kafka.support.serializer.JsonDeserializer.class);
-        configProps.put(ConsumerConfig.GROUP_ID_CONFIG, "usercreation-group");
-        configProps.put(org.springframework.kafka.support.serializer.JsonDeserializer.TRUSTED_PACKAGES, "*");
-        configProps.put(JsonDeserializer.TYPE_MAPPINGS,
-                "com.booking.usermanagement.dtos.UserOnboardedEvent:com.modify.notificationService.dtos.UserOnboardedEvent");
+        configProps.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+        configProps.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
+        // Delegate deserializers
+        configProps.put(ErrorHandlingDeserializer.KEY_DESERIALIZER_CLASS, StringDeserializer.class);
+        configProps.put(ErrorHandlingDeserializer.VALUE_DESERIALIZER_CLASS, JsonDeserializer.class);
 
-        return new org.springframework.kafka.core.DefaultKafkaConsumerFactory<>(configProps);
+        configProps.put(ConsumerConfig.GROUP_ID_CONFIG, "usercreation-group");
+        configProps.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
+        configProps.put(
+                JsonDeserializer.TYPE_MAPPINGS,
+                "com.booking.usermanagement.event.UserOnboardedEvent:com.modify.notificationService.events.UserOnboardedEvent,"
+                        + "com.orderservice.order.events.EmailEvent:com.modify.notificationService.events.EmailEvent"
+        );
+
+        return new DefaultKafkaConsumerFactory<>(configProps);
 
     }
 
@@ -43,6 +53,16 @@ public class KafkaConfig {
     public ConcurrentKafkaListenerContainerFactory<String, Object> kafkaListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, Object> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory());
+
+        factory.setCommonErrorHandler(
+                new org.springframework.kafka.listener.DefaultErrorHandler(
+                        (record, exception) -> {
+                            System.err.println("💥 Error while processing message: " + record);
+                            exception.printStackTrace();
+                        },
+                        new org.springframework.util.backoff.FixedBackOff(0L, 0L)
+                )
+        );
         return factory;
     }
 }

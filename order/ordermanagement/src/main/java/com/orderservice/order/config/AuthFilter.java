@@ -32,10 +32,27 @@ public class AuthFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
+
+
+
         System.out.println("Auth header: " + request.getHeader("Authorization"));
 
         try{
             String authHeader = request.getHeader("Authorization");
+            String apiKey= request.getHeader("X-API-KEY");
+
+            // Check for API key first (for service-to-service)
+            if (apiKey != null && apiKey.equals("ABCD@THE@KING")) {
+                // Create service authentication
+                CustomUserDetails serviceUser = new CustomUserDetails("notification-service", "SERVICE", UUID.randomUUID());
+                UsernamePasswordAuthenticationToken authentication =
+                        new UsernamePasswordAuthenticationToken(serviceUser, null, serviceUser.getAuthorities());
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+                filterChain.doFilter(request, response);
+                return;
+            }
+
+
             if(authHeader==null || !authHeader.startsWith("Bearer ")) {
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Missing or invalid Authorization header");
                 return;

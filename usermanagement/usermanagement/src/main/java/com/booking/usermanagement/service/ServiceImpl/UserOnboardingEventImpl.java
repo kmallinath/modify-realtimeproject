@@ -1,6 +1,6 @@
 package com.booking.usermanagement.service.ServiceImpl;
 
-import com.booking.usermanagement.dtos.UserOnboardedEvent;
+import com.booking.usermanagement.event.UserOnboardedEvent;
 import com.booking.usermanagement.service.UserOnboardingEventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;

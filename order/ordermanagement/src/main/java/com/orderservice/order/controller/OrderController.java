@@ -24,6 +24,8 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class OrderController {
 
+    //swagger addition
+
     private final OrderService orderService;
 
 
@@ -86,6 +88,11 @@ public class OrderController {
     public List<OrderDto> getOrdersByNurseId(@AuthenticationPrincipal CustomUserDetails user) {
         // Implementation to retrieve orders by nurseId
         return orderService.getOrdersByNurseId(user.getUsername());
+    }
+
+    @GetMapping("getbyid/{orderId}")
+    public OrderDto getOrderById(@PathVariable UUID orderId) {
+        return orderService.getOrderById(orderId);
     }
 
 

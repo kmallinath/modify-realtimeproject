@@ -1,4 +1,4 @@
-package com.booking.usermanagement.dtos;
+package com.booking.usermanagement.event;
 
 import lombok.Data;
 

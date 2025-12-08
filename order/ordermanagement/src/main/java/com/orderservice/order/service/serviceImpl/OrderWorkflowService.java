@@ -4,16 +4,22 @@ package com.orderservice.order.service.serviceImpl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.orderservice.order.config.CustomUserDetails;
+import com.orderservice.order.config.KafkaConfig;
 import com.orderservice.order.dto.*;
 import com.orderservice.order.entity.*;
+import com.orderservice.order.events.EligibilityEvent;
+import com.orderservice.order.events.EmailEvent;
+import com.orderservice.order.events.OrderOnboardEvent;
 import com.orderservice.order.exception.ResourceAlreadyExists;
 import com.orderservice.order.exception.ResourceNotFoundException;
 import com.orderservice.order.repository.*;
 import com.orderservice.order.service.OrderService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
@@ -26,6 +32,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.random.RandomGenerator;
 
+@Slf4j
 @Service
 public class OrderWorkflowService implements OrderService {
 
@@ -34,6 +41,9 @@ public class OrderWorkflowService implements OrderService {
 
     @Autowired
     private RestTemplate restTemplate;
+
+    @Autowired
+    private KafkaTemplate<String, Object> kafkaTemplate;
     private final ObjectMapper objectMapper;
     private final EligibilityRepository eligibilityRepository;
     private final OrderProductRepository orderProductRepository;
@@ -104,6 +114,25 @@ public class OrderWorkflowService implements OrderService {
         dto.setCreatedBy(order.getCreatedBy());
         dto.setWorkflow(order.getWorkflow());
         dto.setOrderNumber(order.getOrderNumber());  // Don't forget this!
+
+        try {
+
+
+            OrderOnboardEvent onboardEvent = new OrderOnboardEvent();
+            onboardEvent.setEventType("ORDER_CREATED");
+            onboardEvent.setReason("New order created");
+            onboardEvent.setOrderId(dto.getId());
+            onboardEvent.setStatus("passed");
+            onboardEvent.setCreatedBy(dto.getCreatedBy());
+            EmailEvent emailEvent=new EmailEvent();
+            emailEvent.setEventType("ORDER_CREATED");
+            emailEvent.setPayload(onboardEvent);
+            kafkaTemplate.send("order-topic", emailEvent);
+            log.info("Order created with ID: {}", dto.getId());
+        }
+        catch (Exception e){
+            log.error("Failed to send Kafka event for order ID: {}", dto.getId(), e);
+        }
         return dto;
     }
 
@@ -127,7 +156,18 @@ public class OrderWorkflowService implements OrderService {
         order.setEligibility(eligibility);
         order.setStatus("ORDER_PRODUCT");
         orderRepository.save(order);
+
         dto.setWorkflow(order.getWorkflow());
+
+        EligibilityEvent eligibilityEvent = new EligibilityEvent();
+        eligibilityEvent.setOrderId(order.getId().toString());
+        eligibilityEvent.setEligibilityStatus("COMPLETED");
+        eligibilityEvent.setReason("Eligibility process completed successfully.");
+        eligibilityEvent.setCreatedBy(order.getCreatedBy());
+        EmailEvent emailEvent=new EmailEvent();
+        emailEvent.setEventType("ELIGIBILITY_COMPLETED");
+        emailEvent.setPayload(eligibilityEvent);
+        kafkaTemplate.send("order-topic",emailEvent);
         return dto;
 
     }
@@ -188,6 +228,20 @@ public class OrderWorkflowService implements OrderService {
             dto.setOrderNumber(order.getOrderNumber());
             return dto;
         }).toList();
+    }
+
+    @Override
+    public OrderDto getOrderById(UUID orderId) {
+        Order orderDto=orderRepository.findById(orderId)
+                .orElseThrow(() -> new ResourceNotFoundException("Order",orderId));
+        OrderDto orderDto1=new OrderDto();
+        orderDto1.setId(orderDto.getId());
+        orderDto1.setStatus(orderDto.getStatus());
+        orderDto1.setCreatedBy(orderDto.getCreatedBy());
+        orderDto1.setApprovedBy(orderDto.getApprovedBy());
+        orderDto1.setWorkflow(orderDto.getWorkflow());
+        orderDto1.setOrderNumber(orderDto.getOrderNumber());
+        return orderDto1;
     }
 
 

@@ -1,7 +1,7 @@
 package com.booking.usermanagement.service.ServiceImpl;
 
 import com.booking.usermanagement.dtos.UserDto;
-import com.booking.usermanagement.dtos.UserOnboardedEvent;
+import com.booking.usermanagement.event.UserOnboardedEvent;
 import com.booking.usermanagement.dtos.ValidationUserDto;
 import com.booking.usermanagement.entities.Role;
 import com.booking.usermanagement.entities.User;
@@ -15,7 +15,6 @@ import com.booking.usermanagement.util.DtoMapper;
 import com.booking.usermanagement.util.JwtUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

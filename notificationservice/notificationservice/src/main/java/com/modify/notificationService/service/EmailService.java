@@ -4,5 +4,6 @@ import org.springframework.stereotype.Service;
 
 
 public interface EmailService {
-    public void sendVerificationEmail(String toEmail, String name, Integer verificationCode);
+    public void sendEmail(String toEmail, String name, String  content);
+
 }

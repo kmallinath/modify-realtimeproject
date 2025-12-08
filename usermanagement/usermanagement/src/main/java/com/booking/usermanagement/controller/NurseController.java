@@ -4,6 +4,7 @@ import com.booking.usermanagement.dtos.NurseDto;
 import com.booking.usermanagement.dtos.NurseOnboardRequest;
 import com.booking.usermanagement.entities.Nurse;
 import com.booking.usermanagement.service.ServiceImpl.NurseService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,6 +19,9 @@ import java.util.UUID;
 public class NurseController {
     private final NurseService nurseService;
 
+    //SWAGGER ADDITION
+
+    @Operation(summary = "Onboard a new nurse", description = "Onboard a new nurse with the provided details. Requires SPONSORADMIN role.")
     @PostMapping("/onboard")
     @PreAuthorize("hasRole('SPONSORADMIN')")
     public NurseDto onboard(@RequestBody NurseOnboardRequest req) {

@@ -43,7 +43,16 @@ public class AuthFilter extends OncePerRequestFilter {
         System.out.println("Method: " + request.getMethod());
 
         // Skip JWT validation for public endpoints
-        if (path.startsWith("/api/user/login") || path.startsWith("/api/auth/") || path.startsWith("/api/user/register") || path.startsWith("/api/user/password")) {
+        if (path.startsWith("/api/user/login") || path.startsWith("/api/auth/") || path.startsWith("/api/user/register") || path.startsWith("/api/user/password") || path.startsWith("/v3/api-docs/") || path.startsWith("/swagger-ui/") || path.equals("/swagger-ui.html") || (path.equals("/v3/api-docs")
+                || path.startsWith("/v3/api-docs")
+                || path.startsWith("/swagger-ui")
+                || path.startsWith("/swagger-resources")
+                || path.startsWith("/webjars")
+                || path.equals("/swagger-ui.html")
+                || path.startsWith("/api/user/login")
+                || path.startsWith("/api/user/register")
+                || path.startsWith("/api/auth/")
+                || path.startsWith("/api/user/password"))) {
             System.out.println("Skipping JWT validation for: " + path);
             filterChain.doFilter(request, response);
             return;
