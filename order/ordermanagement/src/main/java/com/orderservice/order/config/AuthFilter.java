@@ -14,6 +14,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 @Component
@@ -31,10 +32,27 @@ public class AuthFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
+
+
+
         System.out.println("Auth header: " + request.getHeader("Authorization"));
 
         try{
             String authHeader = request.getHeader("Authorization");
+            String apiKey= request.getHeader("X-API-KEY");
+
+            // Check for API key first (for service-to-service)
+            if (apiKey != null && apiKey.equals("ABCD@THE@KING")) {
+                // Create service authentication
+                CustomUserDetails serviceUser = new CustomUserDetails("notification-service", "SERVICE", UUID.randomUUID());
+                UsernamePasswordAuthenticationToken authentication =
+                        new UsernamePasswordAuthenticationToken(serviceUser, null, serviceUser.getAuthorities());
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+                filterChain.doFilter(request, response);
+                return;
+            }
+
+
             if(authHeader==null || !authHeader.startsWith("Bearer ")) {
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Missing or invalid Authorization header");
                 return;
@@ -42,6 +60,7 @@ public class AuthFilter extends OncePerRequestFilter {
             String token = authHeader.substring(7);
 
             Claims claims = jwtUtil.validateToken(token);
+            UUID userId= UUID.fromString(claims.getSubject());
             String username = claims.get("email", String.class);
             System.out.println("Authenticated user: " + username);
             Date issuedTime = claims.getIssuedAt();
@@ -51,7 +70,7 @@ public class AuthFilter extends OncePerRequestFilter {
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, " Token has expired");
                 return;
             };
-            CustomUserDetails userDetails = new CustomUserDetails(username,role);
+            CustomUserDetails userDetails = new CustomUserDetails(username,role,userId);
             UsernamePasswordAuthenticationToken authentication =
                     new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 

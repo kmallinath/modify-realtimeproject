@@ -9,8 +9,9 @@ import java.util.UUID;
 @Data
 public class OrderDto {
     private UUID id;
+    private String workflow;
     private String orderNumber;
     private String status;
-    private UUID createdBy;
-    private UUID approvedBy;
+    private String createdBy;
+    private String approvedBy;
 }

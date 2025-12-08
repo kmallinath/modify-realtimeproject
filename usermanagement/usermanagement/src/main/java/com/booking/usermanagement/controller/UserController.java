@@ -1,12 +1,16 @@
 package com.booking.usermanagement.controller;
 
 
+import com.booking.usermanagement.dtos.LoginDto;
 import com.booking.usermanagement.dtos.UserDto;
 import com.booking.usermanagement.dtos.ValidationUserDto;
+import com.booking.usermanagement.entities.User;
 import com.booking.usermanagement.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,6 +28,7 @@ public class UserController {
 
     // register user
     @PostMapping("/register")
+//    @PreAuthorize("hasRole('SPONSORADMIN')")
     public ResponseEntity<UserDto> registerUser(@RequestBody UserDto userDto) {
         log.info("Controller: Received registration request for email: {}", userDto.getEmail());
         UserDto savedUserDto=userService.registerUser(userDto);
@@ -43,6 +48,7 @@ public class UserController {
         return ResponseEntity.ok(updatedUserDto);
     }
     @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasRole('SPONSORADMIN')")
     public ResponseEntity<String> deleteUserById(@PathVariable("id") UUID id) {
         boolean isDeleted = userService.deleteUserById(id);
         if (isDeleted) {
@@ -69,4 +75,40 @@ public class UserController {
         ValidationUserDto validatedUser = userService.validateUser(userName);
         return ResponseEntity.ok(validatedUser);
     }
+
+    @PostMapping("/login")
+    public ResponseEntity<String> loginUser(@RequestBody LoginDto userDto) {
+        String token = userService.loginUser(userDto.getEmail(), userDto.getPassword());
+        return ResponseEntity.ok(token);
+    }
+
+    @PostMapping("/password/forgot")
+    public ResponseEntity<String> forgotPassword(@RequestParam String email) {
+        System.out.println("Password reset requested for email: " + email);
+        String status=userService.forgotPassword(email);
+        if(status.equals("USER_ACCOUNT_NOT_ACTIVE")){
+            return ResponseEntity.status(404).body("User account is not active");
+        }
+        return ResponseEntity.ok("Password reset code sent to email");
+    }
+
+    @PostMapping("/password/reset")
+    public ResponseEntity<String> resetPassword(@RequestParam String email, @RequestParam String code, @RequestParam String newPassword) {
+        String result = userService.resetPassword(email, code, newPassword);
+        return ResponseEntity.ok(result);
+    }
+
+    @PostMapping("/password/activate")
+    public  ResponseEntity<String> activateAccount(@RequestParam String email, @RequestParam String password, @RequestParam String code) {
+        String result = userService.activateAccount(email, password,code);
+        return ResponseEntity.ok(result);
+    }
+
+    @PostMapping("/password/send-activation-code")
+    public  ResponseEntity<Void> sendActivationCode(@RequestParam String email) {
+        //yet to implement a method to get user by email
+        return ResponseEntity.ok().build();
+    }
+
+
 }

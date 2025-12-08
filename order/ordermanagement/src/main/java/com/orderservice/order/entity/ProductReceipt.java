@@ -18,6 +18,8 @@ public class ProductReceipt {
     @JoinColumn(name = "order_id")
     private Order order;
 
+    private String workflow;
+
     // Flexible product details (productName, quantity, dosage, etc.)
     @Column(columnDefinition = "jsonb")
     @JdbcTypeCode(SqlTypes.JSON)// PostgreSQL JSONB column

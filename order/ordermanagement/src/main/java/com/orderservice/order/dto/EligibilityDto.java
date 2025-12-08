@@ -6,5 +6,6 @@ import java.util.Map;
 
 @Data
 public class EligibilityDto {
+    private String workflow;
     private Map<String, Object> responses;
 }

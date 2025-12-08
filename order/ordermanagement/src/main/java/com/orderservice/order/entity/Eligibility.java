@@ -18,6 +18,9 @@ public class Eligibility {
     @JoinColumn(name = "order_id")
     private Order order;
 
+    private String workflow;
+
+
     @Column(columnDefinition = "jsonb")
     @JdbcTypeCode(SqlTypes.JSON)// PostgreSQL JSONB column
     private String responses; // stored as JSON

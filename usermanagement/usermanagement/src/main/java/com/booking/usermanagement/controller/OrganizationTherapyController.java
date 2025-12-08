@@ -56,6 +56,7 @@ public class OrganizationTherapyController {
      * PUT /api/organizations/{orgId}/therapies/qualify
      */
     @PutMapping("/qualify")
+    @PreAuthorize("hasRole('SPONSORADMIN')")
     public ResponseEntity<List<OrganizationTherapy>> replaceQualifiedTherapies(
             @PathVariable UUID orgId,
             @Valid @RequestBody QualifyTherapiesRequest request,

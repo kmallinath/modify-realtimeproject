@@ -57,7 +57,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<String> handleAccessDenied(AccessDeniedException ex) {
-        return ResponseEntity.ok("Access Denied: " + ex.getMessage()
+        return ResponseEntity.ok("You do not have required permission/role to do this action: " + ex.getMessage()
         );
     }
 }

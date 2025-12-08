@@ -7,5 +7,6 @@ import java.util.Map;
 
 @Data
 public class ProductReceiptDto {
+    private String workflow;
     private Map<String, Object> receiptData;
 }

@@ -11,10 +11,10 @@ import java.util.UUID;
 @Data
 public class Nurse {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
     private String name;
+    @Column(unique = true, nullable = false)
     private String email;
     private String phone;
 

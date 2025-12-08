@@ -3,6 +3,7 @@ package com.orderservice.order;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import java.util.Arrays;
 
@@ -16,11 +17,6 @@ public class OrderApplication {
 
 		ApplicationContext context = SpringApplication.run(OrderApplication.class, args);
 
-		System.out.println("=== Loaded Beans Related to Security ===");
-		Arrays.stream(context.getBeanDefinitionNames())
-				.filter(b -> b.toLowerCase().contains("security") || b.toLowerCase().contains("auth"))
-				.sorted()
-				.forEach(System.out::println);
 	}
 
 }
