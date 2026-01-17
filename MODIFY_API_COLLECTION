@@ -1,0 +1,1200 @@
+type: collection.insomnia.rest/5.0
+schema_version: "5.1"
+name: modify
+meta:
+  id: wrk_755161f53da348c183e3c0a94ea13dbc
+  created: 1760980676178
+  modified: 1760980676178
+  description: ""
+collection:
+  - url: http://localhost:8070/api/orders/debug-headers
+    name: New Request
+    meta:
+      id: req_29adb6cad01349438684e86af004ad9c
+      created: 1761468770583
+      modified: 1763297155122
+      isPrivate: false
+      description: ""
+      sortKey: -1761468770583
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/11.6.2
+      - name: Authorization
+        value: Bearer
+          eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMWY1NTI5YS03Y2QwLTQyNDUtYjU2My0zMDFkNGUxYTJhZTUiLCJyb2xlIjoiU1BPTlNPUkFETUlOIiwiZW1haWwiOiJqb2huQGV4YW1wbGUuY29tIiwiaWF0IjoxNzYxOTY1NDcxLCJleHAiOjE3NjE5NjkwNzF9.1tSGwUpYrDiwLR_9b-o05JM9rLyGxUCFI0Zb0a-r6L8
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - name: Gateway Service
+    meta:
+      id: fld_d88e39f872a74e7ba91d79df0b6ab27d
+      created: 1760980693903
+      modified: 1760980693903
+      sortKey: -1760980693903
+      description: ""
+    children:
+      - url: "{{url}}/api/auth/login"
+        name: POST /api/auth/login
+        meta:
+          id: req_97b7eff741c64f848e9e6c63667fb824
+          created: 1760980693907
+          modified: 1766062429246
+          isPrivate: false
+          description: ""
+          sortKey: -1760980693907
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "email": "musictelugu7@gmail.com",
+              "password": "chinnu3737"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: Authorization
+            value: Bearer {{token}}
+            disabled: true
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{url}}/api/auth/login"
+        name: POST /api/auth/login-NURSE
+        meta:
+          id: req_858d46c8d04c480d98d6e8d14d428486
+          created: 1762749580250
+          modified: 1768224765118
+          isPrivate: false
+          description: ""
+          sortKey: -1760980693872.5
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "email": "mallisehwag6@gmail.com",
+              "password": "chinnu37"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: Authorization
+            value: Bearer {{token}}
+            disabled: true
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: User Management Service
+    meta:
+      id: fld_0bb9d69e4c88450ab8bbc42f57fb06e3
+      created: 1760980693909
+      modified: 1763000780348
+      sortKey: -1760980693909
+      description: ""
+    children:
+      - name: Users
+        meta:
+          id: fld_ede1894f3efb45c7a68b81c47d9c99e8
+          created: 1760980693911
+          modified: 1760980693911
+          sortKey: -1760980693911
+          description: ""
+        children:
+          - url: "{{url}}/api/user/register"
+            name: POST /api/user/register
+            meta:
+              id: req_1cbfcf5da33541c4b07fe17aaffb6968
+              created: 1760980693913
+              modified: 1768224239786
+              isPrivate: false
+              description: ""
+              sortKey: -1760980693913
+            method: POST
+            body:
+              mimeType: application/json
+              text: |-
+                {
+                  "name": "KING CLOUD ",
+                  "email": "gcloudmallinath2@gmail.com",
+                  "password": "123456",
+                  "roleId": 1
+                }
+            headers:
+              - name: Content-Type
+                value: application/json
+              - name: Authorization
+                value: Bearer {{token}}
+                disabled: false
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: "{{url}}/api/user/getbyid/5eeba959-7c9d-402c-9b5c-e5154c6fa879"
+            name: GET /api/user/getbyid/{id}
+            meta:
+              id: req_d8d35eb74f2c4632a4dc1b3128bda674
+              created: 1760980693916
+              modified: 1762631784386
+              isPrivate: false
+              description: ""
+              sortKey: -1760980693916
+            method: GET
+            body:
+              mimeType: application/json
+              text: ""
+            headers:
+              - name: Content-Type
+                value: application/json
+              - name: Authorization
+                value: Bearer {{token}}
+                disabled: false
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: "{{url}}/api/user/getbyemail/john5@example.com"
+            name: GET /api/user/getbyemail/{email}
+            meta:
+              id: req_9d4c7f85622e4284b2847328d53ccf10
+              created: 1760980693918
+              modified: 1761973380662
+              isPrivate: false
+              description: ""
+              sortKey: -1760980693918
+            method: GET
+            body:
+              mimeType: application/json
+              text: ""
+            headers:
+              - name: Content-Type
+                value: application/json
+              - name: Authorization
+                value: Bearer {{token}}
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: "{{url}}/api/user/update/5eeba959-7c9d-402c-9b5c-e5154c6fa879"
+            name: PUT /api/user/update/{id}
+            meta:
+              id: req_563400cc6bf04d79b78d8ee40e26262f
+              created: 1760980693919
+              modified: 1761155165395
+              isPrivate: false
+              description: ""
+              sortKey: -1760980693919
+            method: PUT
+            body:
+              mimeType: application/json
+              text: |-
+                {
+                  "name": "NEW UPDATED Namea",
+                	"roleId":1
+                }
+            headers:
+              - name: Content-Type
+                value: application/json
+              - name: Authorization
+                value: Bearer {{token}}
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: "{{url}}/api/user/delete/1e2492fb-a081-41c0-a320-a401d18bf428"
+            name: DELETE /api/user/delete/{id}
+            meta:
+              id: req_0c3d45012f58483c8643fcf9a5dfe84e
+              created: 1760980693921
+              modified: 1761155172874
+              isPrivate: false
+              description: ""
+              sortKey: -1760980693921
+            method: DELETE
+            body:
+              mimeType: application/json
+              text: ""
+            headers:
+              - name: Content-Type
+                value: application/json
+              - name: Authorization
+                value: Bearer {{token}}
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: "{{url}}/api/user/getall"
+            name: POST /api/user/getall
+            meta:
+              id: req_cce1a69ca29f4362a163432c9c163136
+              created: 1761067359493
+              modified: 1761067469026
+              isPrivate: false
+              description: ""
+              sortKey: -1760980693910
+            method: GET
+            body:
+              mimeType: application/json
+              text: ""
+            headers:
+              - name: Content-Type
+                value: application/json
+              - name: Authorization
+                value: Bearer {{token}}
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+      - name: Roles
+        meta:
+          id: fld_3a67a74a33574e1ba3cf24211a096243
+          created: 1760980693922
+          modified: 1760980693922
+          sortKey: -1760980693922
+          description: ""
+        children:
+          - url: "{{url}}/api/user/roles/add"
+            name: POST /api/user/roles/add
+            meta:
+              id: req_ae8433cf17544fd5847af6e1f2faf2fd
+              created: 1760980693923
+              modified: 1761792046747
+              isPrivate: false
+              description: ""
+              sortKey: -1760980693923
+            method: POST
+            body:
+              mimeType: application/json
+              text: |-
+                {
+                  "name": "SPONSOR",
+                  "description": "Administrator role",
+                  "active": true
+                }
+            headers:
+              - name: Content-Type
+                value: application/json
+              - name: Authorization
+                value: Bearer {{token}}
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+      - name: Nurses
+        meta:
+          id: fld_b418bb3aeee64589979683a82331ce20
+          created: 1760980693925
+          modified: 1760980693925
+          sortKey: -1760980693925
+          description: ""
+        children:
+          - url: "{{url}}/api/user/nurses/onboard"
+            name: POST /api/user/nurses/onboard
+            meta:
+              id: req_8926e07b6b2742cc9b9bdc9095da683c
+              created: 1760980693926
+              modified: 1763140055386
+              isPrivate: false
+              description: ""
+              sortKey: -1760980693926
+            method: POST
+            body:
+              mimeType: application/json
+              text: |-
+                {
+                  "name": "Mallinath Kattela",
+                  "email": "mallisehwag6@gmail.com",
+                  "phone": "+12345678901",
+                  "organizationId": "40f1dde7-910a-486d-8e96-4b9b7413d358",
+                  "therapyIds": ["f17fe78f-8af4-4285-a1b7-8ee8808574b6"]
+                }
+            headers:
+              - name: Content-Type
+                value: application/json
+              - name: Authorization
+                value: Bearer {{token}}
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: "{{url}}/api/user/nurses/get/all"
+            name: GET /api/user/nurses/get/all
+            meta:
+              id: req_3d3d3b9a1b4b4ab1b4268b92bf380c1a
+              created: 1760980693927
+              modified: 1763140053893
+              isPrivate: false
+              description: ""
+              sortKey: -1760980693927
+            method: GET
+            body:
+              mimeType: application/json
+              text: ""
+            headers:
+              - name: Content-Type
+                value: application/json
+              - name: Authorization
+                value: Bearer {{token}}
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: "{{url}}/api/user/nurses/get/id/c808cdc4-f0a2-4096-b1d0-7bcad5617a3f"
+            name: GET?api/user/nurses/id
+            meta:
+              id: req_bcbcfbed546c476f8a7312a1b74ade3f
+              created: 1761761321601
+              modified: 1763665625362
+              isPrivate: false
+              description: ""
+              sortKey: -1761761321601
+            method: GET
+            headers:
+              - name: User-Agent
+                value: insomnia/11.6.2
+              - name: Authorization
+                value: Bearer {{token}}
+                description: ""
+                disabled: false
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: "{{url}}/api/user/nurses/get/email/jane.doe2@example.com"
+            name: GET?api/user/nurses/email
+            meta:
+              id: req_bbbeb7563cc441c289c28bb9e154bc1f
+              created: 1761764663002
+              modified: 1761764751668
+              isPrivate: false
+              description: ""
+              sortKey: -1761615046092
+            method: GET
+            headers:
+              - name: User-Agent
+                value: insomnia/11.6.2
+              - name: Authorization
+                value: Bearer {{token}}
+                description: ""
+                disabled: false
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+      - name: Organizations
+        meta:
+          id: fld_66c28bc611654fe19344d4ba101a3404
+          created: 1760980693929
+          modified: 1760980693929
+          sortKey: -1760980693929
+          description: ""
+        children:
+          - url: "{{url}}/api/user/organizations/create"
+            name: POST /api/user/organizations/create
+            meta:
+              id: req_34ca3dd058da4abd833ed443ab9f9aab
+              created: 1760980693931
+              modified: 1762059050862
+              isPrivate: false
+              description: ""
+              sortKey: -1760980693931
+            method: POST
+            body:
+              mimeType: application/json
+              text: |-
+                {
+                  "name": "NEW AYORK ORG REAL AAA",
+                  "country": "USA",
+                  "address": "123 Wellness Ave",
+                  "phone": "+18005551234",
+                  "email": "info@healthorg.com"
+                }
+            headers:
+              - name: Content-Type
+                value: application/json
+              - name: Authorization
+                value: Bearer {{token}}
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: "{{url}}/api/user/organizations/getall"
+            name: GET /api/user/organizations/getall
+            meta:
+              id: req_3e423b9388d34ef398f6d267164ae753
+              created: 1760980693932
+              modified: 1760980693932
+              isPrivate: false
+              description: ""
+              sortKey: -1760980693932
+            method: GET
+            body:
+              mimeType: application/json
+              text: ""
+            headers:
+              - name: Content-Type
+                value: application/json
+              - name: Authorization
+                value: Bearer {{token}}
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+      - name: Organization Therapies
+        meta:
+          id: fld_c7b2e334dd4f4d72ab2dcac4d5d65a3e
+          created: 1760980693934
+          modified: 1760980693934
+          sortKey: -1760980693934
+          description: ""
+        children:
+          - url: "{{url}}/api/user/organizations/40f1dde7-910a-486d-8e96-4b9b7413d358/thera\
+              pies/add"
+            name: POST /api/user/organizations/{orgId}/therapies/qualify
+            meta:
+              id: req_5cf923f11aac453da56895b5ce931591
+              created: 1760980693934
+              modified: 1762740427342
+              isPrivate: false
+              description: ""
+              sortKey: -1760980693934
+            method: POST
+            body:
+              mimeType: application/json
+              text: |-
+                {
+                  "therapyIds": ["f17fe78f-8af4-4285-a1b7-8ee8808574b6"]
+
+                }
+            headers:
+              - name: Content-Type
+                value: application/json
+              - name: Authorization
+                value: Bearer {{token}}
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: "{{url}}/api/user/organizations/c200c5b0-31d6-453c-8f08-7b64935258b4/thera\
+              pies/qualify"
+            name: PUT /api/user/organizations/{orgId}/therapies/qualify
+            meta:
+              id: req_4322ff7cb0c14ed689e969cf5793f709
+              created: 1760980693935
+              modified: 1761068234080
+              isPrivate: false
+              description: ""
+              sortKey: -1760980693935
+            method: PUT
+            body:
+              mimeType: application/json
+              text: |-
+                {
+                  "therapyIds": ["e7f34712-0891-48b5-84cb-1c474b9bbe66"]
+                }
+            headers:
+              - name: Content-Type
+                value: application/json
+              - name: Authorization
+                value: Bearer {{token}}
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: "{{url}}/api/user/organizations/c200c5b0-31d6-453c-8f08-7b64935258b4/thera\
+              pies/disqualify"
+            name: DELETE /api/user/organizations/{orgId}/therapies/qualify
+            meta:
+              id: req_7c2e6d9884434c29b8fff472c341bb84
+              created: 1760980693936
+              modified: 1761068280728
+              isPrivate: false
+              description: ""
+              sortKey: -1760980693936
+            method: DELETE
+            body:
+              mimeType: application/json
+              text: '["9d292f11-3656-48b8-ac99-bddbdd2c0125"]'
+            headers:
+              - name: Content-Type
+                value: application/json
+              - name: Authorization
+                value: Bearer {{token}}
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: "{{url}}/api/user/organizations/c200c5b0-31d6-453c-8f08-7b64935258b4/thera\
+              pies/qualified"
+            name: GET /api/user/organizations/{orgId}/therapies/qualified
+            meta:
+              id: req_19cbc16d04a2493082cb5a2041eeb1af
+              created: 1760980693937
+              modified: 1761068247241
+              isPrivate: false
+              description: ""
+              sortKey: -1760980693937
+            method: GET
+            body:
+              mimeType: application/json
+              text: ""
+            headers:
+              - name: Content-Type
+                value: application/json
+              - name: Authorization
+                value: Bearer {{token}}
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+      - name: Therapies
+        meta:
+          id: fld_4690992e18654755bb4b8d7de58f5dfb
+          created: 1760980693937
+          modified: 1760980693937
+          sortKey: -1760980693937
+          description: ""
+        children:
+          - url: "{{url}}/api/user/therapies/create"
+            name: POST /api/user/therapies
+            meta:
+              id: req_ea2ce851d2f745c6b0d88442fa51e803
+              created: 1760980693938
+              modified: 1762059187040
+              isPrivate: false
+              description: ""
+              sortKey: -1760980693938
+            method: POST
+            body:
+              mimeType: application/json
+              text: |-
+                {
+                  "name": "OLD THERAPY",
+                  "description": "Relaxing treatment",
+                  "price": 75.0,
+                  "active": true
+                }
+            headers:
+              - name: Content-Type
+                value: application/json
+              - name: Authorization
+                value: Bearer {{token}}
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: "{{url}}/api/user/therapies/getAll"
+            name: GET /api/user/therapies/getAll
+            meta:
+              id: req_9a6f4e6f0db34b5ea2a0bc3e6bede960
+              created: 1760980693939
+              modified: 1762059008951
+              isPrivate: false
+              description: ""
+              sortKey: -1760980693939
+            method: GET
+            body:
+              mimeType: application/json
+              text: ""
+            headers:
+              - name: Content-Type
+                value: application/json
+              - name: Authorization
+                value: Bearer {{token}}
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: "{{url}}/api/user/therapies/update/f17fe78f-8af4-4285-a1b7-8ee8808574b6"
+            name: PUT /api/user/therapies/update/{id}
+            meta:
+              id: req_1a714cd7896a495496effdb37ec4e294
+              created: 1760980693940
+              modified: 1762740390746
+              isPrivate: false
+              description: ""
+              sortKey: -1760980693838
+            method: PUT
+            body:
+              mimeType: application/json
+              text: |-
+                {
+                  "name": "UPDATED NEW  Therapy",
+                  "description": "New description",
+                  "price": 80.0,
+                  "active": true
+                }
+            headers:
+              - name: Content-Type
+                value: application/json
+              - name: Authorization
+                value: Bearer {{token}}
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+  - name: Order Service
+    meta:
+      id: fld_4e4ebc2b939b41d8be66533f09c8a875
+      created: 1760980693940
+      modified: 1763294345057
+      sortKey: -1760980693940
+      description: ""
+    children:
+      - url: http://localhost:8070/api/orders/create
+        name: POST /api/orders/create?nurseId={uuid}
+        meta:
+          id: req_e7de59dffa41408397f56b7a6aefd583
+          created: 1760980693942
+          modified: 1765045434034
+          isPrivate: false
+          description: ""
+          sortKey: -1760980693942
+        method: POST
+        body:
+          mimeType: application/json
+          text: ""
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: Authorization
+            value: Bearer {{ _.token }}
+            disabled: false
+          - name: X-API-KEY
+            value: ABCD@THE@KING
+            description: ""
+            disabled: true
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{url}}/api/orders/0e961c2d-766f-4a48-b6b8-b8cb38467e0c/eligibility"
+        name: POST /api/orders/{orderId}/eligibility
+        meta:
+          id: req_83aa1f4e0e494b509fdfde10e0065a0d
+          created: 1760980693943
+          modified: 1768224831257
+          isPrivate: false
+          description: ""
+          sortKey: -1760980693943
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "responses": {"question1": "yes","question2":"I love my country"}
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: Authorization
+            value: Bearer {{token}}
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{url}}/api/orders/0e961c2d-766f-4a48-b6b8-b8cb38467e0c/product"
+        name: POST /api/orders/{orderId}/product
+        meta:
+          id: req_be639081d0114164b8a05f299310b72e
+          created: 1760980693944
+          modified: 1768224840272
+          isPrivate: false
+          description: ""
+          sortKey: -1760980693944
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "productDetails": {"name": "Therapy Kit", "quantity": 1}
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: Authorization
+            value: Bearer {{token}}
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{url}}/api/orders/0e961c2d-766f-4a48-b6b8-b8cb38467e0c/receipt"
+        name: POST /api/orders/{orderId}/receipt
+        meta:
+          id: req_cbe48d779cab4a4496caeb222f8af7d8
+          created: 1760980693945
+          modified: 1768224849076
+          isPrivate: false
+          description: ""
+          sortKey: -1760980693945
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "receiptData": {"total": 150.0, "currency": "USD"}
+            	
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: Authorization
+            value: Bearer {{token}}
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{url}}/api/orders/getbynurse"
+        name: GET /api/orders/getbynurse
+        meta:
+          id: req_9bf448dec9e642b9934773c0ab86328c
+          created: 1763144705759
+          modified: 1768244298155
+          isPrivate: false
+          description: ""
+          sortKey: -1763144705759
+        method: GET
+        body:
+          mimeType: application/x-www-form-urlencoded
+          params:
+            - name: workflow
+              value: MALLI
+              disabled: true
+            - name: country
+              value: India
+              disabled: true
+        headers:
+          - name: Authorization
+            value: Bearer
+              eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjODA4Y2RjNC1mMGEyLTQwOTYtYjFkMC03YmNhZDU2MTdhM2YiLCJyb2xlIjoiTlVSU0UiLCJlbWFpbCI6Im1hbGxpc2Vod2FnNkBnbWFpbC5jb20iLCJpYXQiOjE3NjgyNDQyNzYsImV4cCI6MTc2ODI0Nzg3Nn0.eKjkmltyZSNi5nYpY8X1zOzouv55fOQYuY5jQmGvAPQ
+          - name: Content-Type
+            value: application/x-www-form-urlencoded
+          - name: X-API-KEY
+            value: ABCD@THE@KING
+            description: ""
+            disabled: true
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{url}}/api/orders/test-cache"
+        name: GET /api/orders/getbynurse
+        meta:
+          id: req_02fc386933844b31ab7c1457269d5096
+          created: 1768243202356
+          modified: 1768243395235
+          isPrivate: false
+          description: ""
+          sortKey: -1762930800230.5
+        method: GET
+        body:
+          mimeType: application/x-www-form-urlencoded
+          params:
+            - name: workflow
+              value: MALLI
+              disabled: true
+            - name: country
+              value: India
+              disabled: true
+        headers:
+          - name: Authorization
+            value: Bearer
+              eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjODA4Y2RjNC1mMGEyLTQwOTYtYjFkMC03YmNhZDU2MTdhM2YiLCJyb2xlIjoiTlVSU0UiLCJlbWFpbCI6Im1hbGxpc2Vod2FnNkBnbWFpbC5jb20iLCJpYXQiOjE3NjgyNDE1MzcsImV4cCI6MTc2ODI0NTEzN30.aofxcqUv1KdTbkC8wvXETpyqgQdm5NFQE6PiKv9P2V0
+            disabled: true
+          - name: Content-Type
+            value: application/x-www-form-urlencoded
+          - name: X-API-KEY
+            value: ABCD@THE@KING
+            description: ""
+            disabled: true
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: User Management Extra Endpoints
+    meta:
+      id: fld_5a8e01cabedc46748491fa713a8ee9b8
+      created: 1762715215416
+      modified: 1762715215416
+      sortKey: -1762715213363
+      description: ""
+    children:
+      - name: User Account Actions
+        meta:
+          id: fld_2fb786c454d946018fb508cbfd675432
+          created: 1762715215419
+          modified: 1762715215419
+          sortKey: -1762715213362
+          description: ""
+        children:
+          - url: "{{ _.url }}/api/user/password/activate"
+            name: Activate Account
+            meta:
+              id: req_b6a36b97680441eaa2b36266ece09521
+              created: 1762715215422
+              modified: 1768224293455
+              isPrivate: false
+              description: ""
+              sortKey: -1762715213361
+            method: POST
+            parameters:
+              - name: email
+                value: gcloudmallinath2@gmail.com
+              - name: password
+                value: "123456"
+              - name: code
+                value: "320708"
+            headers:
+              - name: Authorization
+                value: Bearer {{token}}
+                disabled: false
+              - name: Content-Type
+                value: application/x-www-form-urlencoded
+            authentication:
+              type: bearer
+              disabled: true
+              token: "{{token}}"
+              prefix: ""
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: "{{ _.url }}/api/user/password/reset"
+            name: Reset Password
+            meta:
+              id: req_21f84a8e8b7f4e1c9c508cf2062df781
+              created: 1762715215425
+              modified: 1763057780599
+              isPrivate: false
+              description: ""
+              sortKey: -1762715213360
+            method: POST
+            parameters:
+              - name: email
+                value: musictelugu7@gmail.com
+              - name: code
+                value: "633977"
+              - name: newPassword
+                value: chinnu3737
+            headers:
+              - name: Content-Type
+                value: application/x-www-form-urlencoded
+              - name: Authorization
+                value: Bearer {{ _.token }}
+                description: ""
+                disabled: false
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: "{{ _.url }}/api/user/password/resend-activation"
+            name: Resend Activation Code
+            meta:
+              id: req_564f7c7742c24ac691fb138c251f516c
+              created: 1762715215426
+              modified: 1766925460490
+              isPrivate: false
+              description: ""
+              sortKey: -1762715213359
+            method: POST
+            body:
+              mimeType: multipart/form-data
+              params:
+                - name: email
+                  value: kattelamallinath@gmail.com
+                  description: ""
+                  disabled: false
+            headers:
+              - name: Content-Type
+                value: multipart/form-data
+              - name: Authorization
+                value: Bearer {{token}}
+            authentication:
+              type: bearer
+              disabled: false
+              token: ""
+              prefix: ""
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: "{{ _.url }}/api/user/password/forgot"
+            name: Forgot Password
+            meta:
+              id: req_8c3ede60c11d465d99f19127c6c8268c
+              created: 1762716894702
+              modified: 1766925514339
+              isPrivate: false
+              description: ""
+              sortKey: -1762716894702
+            method: POST
+            parameters:
+              - name: email
+                value: kattelamallinath@gmail.com
+            headers:
+              - name: User-Agent
+                value: insomnia/12.0.0
+              - name: Authorization
+                value: Bearer {{ _.token }}
+                description: ""
+                disabled: false
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+  - name: WorkflowChanges
+    meta:
+      id: fld_a25e38df091941b2bead88d2cf414bd5
+      created: 1763275121573
+      modified: 1763297152101
+      sortKey: -1761102713102
+      description: ""
+    children:
+      - url: "{{url}}/api/orders/map/workflow"
+        name: POST /api/orders/map/workflow
+        meta:
+          id: req_6101743f4ab549aca5225342b616d622
+          created: 1763143009154
+          modified: 1763297168986
+          isPrivate: false
+          description: ""
+          sortKey: -1763297142784
+        method: POST
+        body:
+          mimeType: multipart/form-data
+        parameters:
+          - name: country
+            value: IND
+          - name: workflow
+            value: TESTUSA
+        headers:
+          - name: Content-Type
+            value: multipart/form-data
+          - name: Authorization
+            value: Bearer
+              eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjODA4Y2RjNC1mMGEyLTQwOTYtYjFkMC03YmNhZDU2MTdhM2YiLCJyb2xlIjoiTlVSU0UiLCJlbWFpbCI6Im1hbGxpc2Vod2FnNkBnbWFpbC5jb20iLCJpYXQiOjE3NjMyNzM1NzEsImV4cCI6MTc2MzI3NzE3MX0.hqY5R0hx2wINNuYvLSfvRcalO3Kd3FFzCod0MBjRtGg
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{url}}/api/orders/update/workflow"
+        name: POST /api/orders/update/workflow
+        meta:
+          id: req_05c96650cbff49a7ab948de857d18ace
+          created: 1763275190600
+          modified: 1763297170615
+          isPrivate: false
+          description: ""
+          sortKey: -1763297142734
+        method: PUT
+        body:
+          mimeType: multipart/form-data
+        parameters:
+          - name: country
+            value: USA
+          - name: workflow
+            value: USAWORKLOW
+        headers:
+          - name: Content-Type
+            value: multipart/form-data
+          - name: Authorization
+            value: Bearer
+              eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjODA4Y2RjNC1mMGEyLTQwOTYtYjFkMC03YmNhZDU2MTdhM2YiLCJyb2xlIjoiTlVSU0UiLCJlbWFpbCI6Im1hbGxpc2Vod2FnNkBnbWFpbC5jb20iLCJpYXQiOjE3NjMyNzM1NzEsImV4cCI6MTc2MzI3NzE3MX0.hqY5R0hx2wINNuYvLSfvRcalO3Kd3FFzCod0MBjRtGg
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:8070/api/orders/workflow-schemas/add
+        name: New Request
+        meta:
+          id: req_186d74e4951a4a42a011c5a266b67ce9
+          created: 1763297142684
+          modified: 1763297641051
+          isPrivate: false
+          description: ""
+          sortKey: -1763297142684
+        method: POST
+        body:
+          mimeType: application/json
+          text: >-
+            {
+            	"workflowName": "WORKFLOW_US_V1",
+            	"eligibilitySchema": "{\"fields\":[{\"fieldName\":\"patientAge\",\"fieldType\":\"number\",\"label\":\"Patient Age\",\"required\":true,\"validation\":{\"min\":0,\"max\":120},\"order\":1},{\"fieldName\":\"hasInsurance\",\"fieldType\":\"select\",\"label\":\"Has Insurance?\",\"required\":true,\"options\":[\"Yes\",\"No\"],\"order\":2},{\"fieldName\":\"insuranceProvider\",\"fieldType\":\"text\",\"label\":\"Insurance Provider\",\"required\":false,\"conditionalDisplay\":{\"dependsOn\":\"hasInsurance\",\"showWhen\":\"Yes\"},\"order\":3}]}",
+            	"orderProductSchema": "{\"fields\":[{\"fieldName\":\"productName\",\"fieldType\":\"select\",\"label\":\"Product Name\",\"required\":true,\"options\":[\"Insulin Glargine\",\"Insulin Aspart\",\"Metformin\"],\"order\":1},{\"fieldName\":\"quantity\",\"fieldType\":\"number\",\"label\":\"Quantity\",\"required\":true,\"validation\":{\"min\":1,\"max\":100},\"order\":2},{\"fieldName\":\"dosage\",\"fieldType\":\"text\",\"label\":\"Dosage Instructions\",\"required\":true,\"order\":3}]}",
+            	"receiptSchema": "{\"fields\":[{\"fieldName\":\"receiptNumber\",\"fieldType\":\"text\",\"label\":\"Receipt Number\",\"required\":true,\"validation\":{\"pattern\":\"^RCP-[0-9]{6}$\"},\"order\":1},{\"fieldName\":\"receiptDate\",\"fieldType\":\"date\",\"label\":\"Receipt Date\",\"required\":true,\"order\":2},{\"fieldName\":\"receiptImage\",\"fieldType\":\"file\",\"label\":\"Upload Receipt\",\"required\":true,\"validation\":{\"acceptedTypes\":[\"image/jpeg\",\"image/png\",\"application/pdf\"],\"maxSize\":5242880},\"order\":3}]}"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: Authorization
+            value: Bearer {{ _.token }}
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_9d8293150db5ebf9aa2c56e7523518adca9782fb
+    created: 1760980676186
+    modified: 1760980676186
+environments:
+  name: Base Environment
+  meta:
+    id: env_9d8293150db5ebf9aa2c56e7523518adca9782fb
+    created: 1760980676183
+    modified: 1768240231773
+    isPrivate: false
+  data:
+    url: http://localhost:8070
+    token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjODA4Y2RjNC1mMGEyLTQwOTYtYjFkMC03YmNhZDU2MTdhM2YiLCJyb2xlIjoiTlVSU0UiLCJlbWFpbCI6Im1hbGxpc2Vod2FnNkBnbWFpbC5jb20iLCJpYXQiOjE3NjgyNDAyMjIsImV4cCI6MTc2ODI0MzgyMn0.IA5ps4_rw2zSoiTgKPw-li348VO3bZSIXduktt15VeU
